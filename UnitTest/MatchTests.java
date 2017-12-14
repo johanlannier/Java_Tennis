@@ -45,20 +45,10 @@ public class MatchTests {
     @Test
     public void winGame(){
         //Player1
-        assertEquals("0", match.pointsForPlayer(player1));
-
         match.updateWithPointWonBy(player1);
-        assertEquals("15", match.pointsForPlayer(player1));
-
         match.updateWithPointWonBy(player1);
-        assertEquals("30", match.pointsForPlayer(player1));
-
         match.updateWithPointWonBy(player1);
-        assertEquals("40", match.pointsForPlayer(player1));
-
         match.updateWithPointWonBy(player1);
-        assertEquals("A", match.pointsForPlayer(player1));
-
         match.updateWithPointWonBy(player1);
         assertEquals("0", match.pointsForPlayer(player1));
 
@@ -69,24 +59,15 @@ public class MatchTests {
     @Test
     public void AdvantageLost(){
         //Player1
-        assertEquals("0", match.pointsForPlayer(player1));
         match.updateWithPointWonBy(player1);
-        assertEquals("15", match.pointsForPlayer(player1));
         match.updateWithPointWonBy(player1);
-        assertEquals("30", match.pointsForPlayer(player1));
         match.updateWithPointWonBy(player1);
-        assertEquals("40", match.pointsForPlayer(player1));
         match.updateWithPointWonBy(player1);
-        assertEquals("A", match.pointsForPlayer(player1));
 
         //Player2
-        assertEquals("0", match.pointsForPlayer(player2));
         match.updateWithPointWonBy(player2);
-        assertEquals("15", match.pointsForPlayer(player2));
         match.updateWithPointWonBy(player2);
-        assertEquals("30", match.pointsForPlayer(player2));
         match.updateWithPointWonBy(player2);
-        assertEquals("40", match.pointsForPlayer(player2));
         match.updateWithPointWonBy(player2);
 
         assertEquals("40",match.pointsForPlayer(player1));
