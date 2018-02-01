@@ -6,6 +6,7 @@ public class TennisMatch {
     private MatchType matchType;
     private HashMap<Player, Game> partie;
     private boolean tieBreakInLastSet;
+    boolean isFinished=false;
 
     public TennisMatch(Player player1, Player player2, MatchType matchType, boolean tieBreakInLastSet) {
         this.player1 = player1;
@@ -17,32 +18,86 @@ public class TennisMatch {
         this.partie.put(player2, new Game());
     }
 
-    public void updateWithPointWonBy(Player player){
-        this.partie.get(player).addScore();
+    public int getNbSetsWin(Player player){
+        return this.partie.get(player).getNbSet().getWin();
+    }
 
-        //Gagner un jeu
-        if(this.partie.get(player).getScore().equals("W")){
-            if(player==player1){
+    public void updateWithPointWonBy(Player player){
+        if(!isFinished) {
+            this.partie.get(player).addScore();
+
+            if (this.partie.get(player1).getScore().equals("A") && !this.partie.get(player2).getScore().equals("40")) {
+                this.partie.get(player1).addScore();
                 this.partie.get(player1).winGame();
                 this.partie.get(player2).looseGame();
-            }else{
+            }
+
+            if (this.partie.get(player2).getScore().equals("A") && !this.partie.get(player1).getScore().equals("40")) {
+                this.partie.get(player2).addScore();
                 this.partie.get(player2).winGame();
                 this.partie.get(player1).looseGame();
             }
-        }
 
-        //Perdre l'avantage
-        if(this.partie.get(player).getScore().equals("A")){
-            if(player==player1){
-                if(this.partie.get(player2).getScore().equals("A")){
-                    this.partie.get(player2).reduceScore();
-                    this.partie.get(player1).reduceScore();
+            //Gagner un jeu
+            if (this.partie.get(player).getScore().equals("W")) {
+                if (player == player1) {
+                    this.partie.get(player1).winGame();
+                    this.partie.get(player2).looseGame();
+                } else {
+                    this.partie.get(player2).winGame();
+                    this.partie.get(player1).looseGame();
                 }
             }
-            if(player==player2){
-                if(this.partie.get(player1).getScore().equals("A")){
-                    this.partie.get(player1).reduceScore();
-                    this.partie.get(player2).reduceScore();
+
+            //Perdre l'avantage
+            if (this.partie.get(player).getScore().equals("A")) {
+                if (player == player1) {
+                    if (this.partie.get(player2).getScore().equals("A")) {
+                        this.partie.get(player2).reduceScore();
+                        this.partie.get(player1).reduceScore();
+                    }
+                }
+                if (player == player2) {
+                    if (this.partie.get(player1).getScore().equals("A")) {
+                        this.partie.get(player1).reduceScore();
+                        this.partie.get(player2).reduceScore();
+                    }
+                }
+            }
+
+            //Vérif win set
+            if (this.partie.get(player1).getNbJeu().getWin() >= 6 && this.partie.get(player1).getNbJeu().getWin() >= this.partie.get(player2).getNbJeu().getWin() + 2) {
+                System.out.println("Set gagné par " + player1.getName() + " : " + this.partie.get(player1).getNbJeu().getWin() + "/" + this.partie.get(player2).getNbJeu().getWin());
+                this.partie.get(player1).getNbSet().winSet();
+                this.partie.get(player1).getNbJeu().reset();
+                this.partie.get(player2).getNbJeu().reset();
+            }
+            if (this.partie.get(player2).getNbJeu().getWin() >= 6 && this.partie.get(player2).getNbJeu().getWin() >= this.partie.get(player1).getNbJeu().getWin() + 2) {
+                System.out.println("Set gagné par " + player2.getName() + " : " + this.partie.get(player2).getNbJeu().getWin() + "/" + this.partie.get(player1).getNbJeu().getWin());
+                this.partie.get(player2).getNbSet().winSet();
+                this.partie.get(player1).getNbJeu().reset();
+                this.partie.get(player2).getNbJeu().reset();
+            }
+
+            //Vérif win match
+            if (this.matchType == MatchType.BEST_OF_THREE) {
+                if (this.partie.get(player1).getNbSet().getWin() == 3) {
+                    isFinished=true;
+                    System.out.println("Le joueur "+player1.getName()+" a gagné le match ! --> "+this.partie.get(player1).getNbSet().getWin()+"/"+this.partie.get(player2).getNbSet().getWin());
+                }
+                if (this.partie.get(player2).getNbSet().getWin() == 3) {
+                    isFinished=true;
+                    System.out.println("Le joueur "+player2.getName()+" a gagné le match ! --> "+this.partie.get(player2).getNbSet().getWin()+"/"+this.partie.get(player1).getNbSet().getWin());
+                }
+            }
+            if (this.matchType == MatchType.BEST_OF_FIVE) {
+                if (this.partie.get(player1).getNbSet().getWin() == 5) {
+                    isFinished=true;
+                    System.out.println("Le joueur "+player1.getName()+" a gagné le match ! --> "+this.partie.get(player1).getNbSet().getWin()+"/"+this.partie.get(player2).getNbSet().getWin());
+                }
+                if (this.partie.get(player2).getNbSet().getWin() == 5) {
+                    isFinished=true;
+                    System.out.println("Le joueur "+player2.getName()+" a gagné le match ! --> "+this.partie.get(player2).getNbSet().getWin()+"/"+this.partie.get(player1).getNbSet().getWin());
                 }
             }
         }
@@ -52,16 +107,8 @@ public class TennisMatch {
         return this.partie.get(player).getScore();
     }
 
-    public int currentSetNumber(){
-        return 0;
-    }
-
     public int gamesInCurrentSetForPlayer(Player player){
         return this.partie.get(player).getNbJeu().getWin();
-    }
-
-    public int gamesInSetForPlayer(int setNumber, Player player){
-        return 0;
     }
 
     public boolean isFinished(){

@@ -12,8 +12,4 @@ public class Set {
     public int getWin() {
         return win;
     }
-
-    public void setWin(int win) {
-        this.win = win;
-    }
 }

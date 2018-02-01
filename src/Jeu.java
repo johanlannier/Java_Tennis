@@ -13,7 +13,7 @@ public class Jeu {
         return win;
     }
 
-    public void setWin(int win) {
-        this.win = win;
+    public void reset(){
+        this.win=0;
     }
 }
