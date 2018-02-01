@@ -2,6 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MatchTestsFIVE {
     private Player player1;
@@ -67,6 +68,26 @@ public class MatchTestsFIVE {
     }
 
     @Test
+    public void LooseAdvantage(){
+        //Player1
+        match.updateWithPointWonBy(player1); //15
+        match.updateWithPointWonBy(player1); //30
+        match.updateWithPointWonBy(player1); //40
+
+        //Player2
+        match.updateWithPointWonBy(player2); //15
+        match.updateWithPointWonBy(player2); //30
+        match.updateWithPointWonBy(player2); //40
+
+        match.updateWithPointWonBy(player1); //A
+        assertEquals("A",match.pointsForPlayer(player1));
+
+        match.updateWithPointWonBy(player2); //A
+        assertEquals("40",match.pointsForPlayer(player1));
+        assertEquals("40",match.pointsForPlayer(player2));
+    }
+
+    @Test
     public void WinGameWithoutAdvantage(){
         //Player1
         match.updateWithPointWonBy(player1); //15
@@ -89,7 +110,9 @@ public class MatchTestsFIVE {
 
     @Test
     public void WinASet(){
+        System.out.println("\n\n----------------- TEST BEST OF FIVE -----------------");
         //6 jeu gagnés par player1
+        System.out.println("\nWin a set:");
         for(int i=0; i<6;i++) {
             match.updateWithPointWonBy(player1); //15
             match.updateWithPointWonBy(player1); //30
@@ -104,7 +127,7 @@ public class MatchTestsFIVE {
     public void WinMatch(){
         System.out.println("\nWin a match:");
 
-        //3 sets gagnés par player1
+        //5 sets gagnés par player1
         for(int j=0; j<5;j++) {
             //6 jeu gagnés par player1
             for (int i = 0; i < 6; i++) {
@@ -190,7 +213,7 @@ public class MatchTestsFIVE {
         }
 
 
-        for(int i=0; i<5;i++){
+        for(int i=0; i<3;i++){
         //1er jeu 
         match.updateWithPointWonBy(player1); //15
         match.updateWithPointWonBy(player1); //30
@@ -257,6 +280,7 @@ public class MatchTestsFIVE {
         assertEquals(0, match.gamesInCurrentSetForPlayer(player2));
     }
 
+        assertTrue(match.isFinished());
 
     }
 
